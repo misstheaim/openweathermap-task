@@ -1,66 +1,65 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Weather API - Laravel Developer Task
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+We will use [**OpenWeatherMap API**](https://openweathermap.org/current) to get current weather data based on latitude/longitude.
 
-## About Laravel
+- **API Link**: [https://openweathermap.org/current](https://openweathermap.org/current)
+- **API Key**: `Get it from OpenWeatherMap website`
+- **Technology: Laravel, MySQL, Redis**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# Task
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Pull the weather information of the cities of Uzbekistan and store it in the database every hour.
+- Create APIs to retrieve weather data with API Documentation.
+- Cover your APIs, functions and services with PHPUnit/Pest test-cases
 
-## Learning Laravel
+# Rest API Endpoints
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- `GET /api/cities`: Get the list of the stored cities
+- `GET /api/weather/{city}`: Get the historical weather information for city
+- `GET /api/weather/{city}/latest`: Get the latest weather information for city
+- `GET /api/weather`: Get the list of the stored all weather data
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+# Data Models
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### City Model
 
-## Laravel Sponsors
+- City name
+- Latitude
+- Longitude
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Weather Model:
 
-### Premium Partners
+- City
+- Time
+- Weather name
+- Latitude
+- Longitude
+- Temperature (in Celsius)
+- MIN Temperature (in Celsius)
+- MAX Temperature (in Celsius)
+- Pressure
+- Humidity
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+# Example Cities
 
-## Contributing
+| Name    | Latitude | Longitude |
+|---------|----------|-----------|
+| Tashkent | 41.2995 | 69.2401 |
+| Samarkand | 39.6542 | 66.9597 |
+| Bukhara | 39.7745 | 64.4286 |
+| Khiva | 41.3786 | 60.3560 |
+| Nukus | 42.4611 | 59.6164 |
+| Andijan | 40.7821 | 72.3442 |
+| Namangan | 40.9983 | 71.6726 |
+| Fergana | 40.3864 | 71.7864 |
+| Termiz | 37.2241 | 67.2783 |
+| Kokand | 40.5306 | 70.9428 |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Submission:
 
-## Code of Conduct
+Fork this repository and make your changes in that forked repo. Once you finish the task, create Pull Request from the forked repo to the main repo. Tag following people as reviewer in your PR and notify the recruiter:
+- @Sherlockboy
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Also, update the readme with the instructions of how to run the project and get the data locally.
