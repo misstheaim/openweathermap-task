@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WeatherCityRequest;
 use Illuminate\Http\Request;
 use App\Models\Weather;
 use App\Models\City;
@@ -13,38 +14,21 @@ class APIController extends Controller
 {
     public function getCities() 
     {
-        $cities = new CityCollection(City::all());
-        return $cities;
+        return new CityCollection(City::all());
     }
 
-    public function getHistoricalInfo(string $city_name) 
+    public function getHistoricalInfo(WeatherCityRequest $req)
     {
-        $validate = Weather::where('city', $city_name)->exists();
-        if ($validate) {
-            $data = new WeatherCollection(Weather::where('city', $city_name)->orderBy('date_time')->get());
-        } else {
-            $data = "<div>The city doesn't exist</div>\nPlease check if you write the name correctly or try another!"; //Later there could be some kind of JSON response with status code 404
-        }
-        
-        return $data;
+        return new WeatherCollection(Weather::where('city', $req->route('city'))->orderBy('date_time')->get());
     }
 
-    public function getLatestInfo(string $city_name) 
+    public function getLatestInfo(WeatherCityRequest $req) 
     {
-        $validate = Weather::where('city', $city_name)->exists();
-        if ($validate) {
-            $data = new WeatherResource(Weather::where('city', $city_name)->latest('date_time')->first());
-        } else {
-            $data = "<div>The city doesn't exist</div>\nPlease check if you write the name correctly or try another!";
-        }
-        
-        return $data;
+        return new WeatherResource(Weather::where('city', $req->route('city'))->latest('date_time')->first());
     }
 
     public function getAllInfo() 
     {
-        $data = new WeatherCollection(Weather::paginate(5));
-
-        return $data;
+        return new WeatherCollection(Weather::paginate(5));
     }
 }

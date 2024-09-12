@@ -6,5 +6,3 @@ use App\Http\Controllers\OWPDataReceiveController;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/check', OWPDataReceiveController::class);
