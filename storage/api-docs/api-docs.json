@@ -1,0 +1,227 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API for getting weather data about cities around the world",
+        "contact": {
+            "name": "Alex"
+        },
+        "version": "0.1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api",
+            "description": "Local server for developing uses test data"
+        }
+    ],
+    "paths": {
+        "/cities": {
+            "get": {
+                "summary": "Return a list of all cities in database",
+                "operationId": "e464878d03df183b64294cf39da656cf",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "city_name": {
+                                                "type": "string"
+                                            },
+                                            "latitude": {
+                                                "type": "number",
+                                                "format": "float"
+                                            },
+                                            "longitude": {
+                                                "type": "number",
+                                                "format": "float"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/weather/{city}": {
+            "get": {
+                "summary": "Return a list of all data by City parametr",
+                "operationId": "48337562437b7d4e2c9b42317d5cdabe",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "path",
+                        "description": "The city name",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/weather_data_json"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/weather/{city}/latest": {
+            "get": {
+                "summary": "Return latest weather record by City parametr ordered by date_time",
+                "operationId": "d42b32bf4155664faa635690f2af7f19",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "path",
+                        "description": "The city name",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/weather_data_json"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/weather": {
+            "get": {
+                "summary": "Returns all data from database 5 records by page",
+                "operationId": "0d92720110133f35f5d099f0a9d0421e",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/weather_data_json"
+                                            }
+                                        },
+                                        "links": {
+                                            "properties": {
+                                                "first": {
+                                                    "type": "string",
+                                                    "example": "http://localhost/api/weather?page=1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "meta": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "weather_data_json": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "date_time": {
+                        "type": "string"
+                    },
+                    "weather_name": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "temperature": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "min_temperature": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "max_temperature": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "pressure": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "humidity": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "404": {
+                "description": "Not Found"
+            },
+            "422": {
+                "description": "Unprocessable Content"
+            }
+        }
+    }
+}

@@ -7,6 +7,7 @@ use App\Models\Weather;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -18,27 +19,28 @@ class OWPReciever_v2Service implements WeatherDataReciever
 
     public function __construct()
     {
-        $this->api_key = env('OWP_API_KEY', 11);
-        $this->units = env('OWP_UNITS', 11);
+        //::add('key', env('OWP_API_KEY') , now()->addMinutes(10));
+        //Cache::add('units', env('OWP_UNITS') , now()->addMinutes(10));
+        //$this->api_key = Cache::get('key');
+        //$this->units = Cache::get('units');
+        $this->api_key = env('OWP_API_KEY');
+        $this->units = env('OWP_UNITS');
     }
 
 
-    public function recieveData() : bool
+    public function recieveData($city) : bool
     {
-
-        $cities = $this->getCities();
+        //$cities = $this->getCities();
         
 
-        foreach ($cities as $city) {
+        //foreach ($cities as $city) {
             $city_name = $city->name;
             $info = $this->getRequest($city);
 
             $this->createData($city_name, $info);
-            
-            //dd($info);
-        }
 
-        dump('Data succefully recieved! version:2');
+        //}
+        //dump('Data succefully recieved! version:2');
         return true;
     }
 
@@ -50,35 +52,26 @@ class OWPReciever_v2Service implements WeatherDataReciever
     {
         $date_time = $this->getTime($info);
 
-        try {
+        Weather::create([
+            'city' => $city_name,
+            'date_time' => $date_time,
+            'weather_name' => $info['weather'][0]['main'],
+            'latitude' => $info['coord']['lat'],
+            'longitude' => $info['coord']['lon'],
+            'temperature' => $info['main']['temp'],
+            'min_temperature' => $info['main']['temp_min'],
+            'max_temperature' => $info['main']['temp_max'],
+            'pressure' => $info['main']['pressure'],
+            'humidity' => $info['main']['humidity']
+        ]);
 
-            Weather::create([
-                'city' => $city_name,
-                'date_time' => $date_time,
-                'weather_name' => $info['weather'][0]['main'],
-                'latitude' => $info['coord']['lat'],
-                'longitude' => $info['coord']['lon'],
-                'temperature' => $info['main']['temp'],
-                'min_temperature' => $info['main']['temp_min'],
-                'max_temperature' => $info['main']['temp_max'],
-                'pressure' => $info['main']['pressure'],
-                'humidity' => $info['main']['humidity']
-            ]);
-
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
     }
     
 
 
     private function getCities() 
     {
-        try {
-            return DB::table('cities')->get();
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
+        return DB::table('cities')->get();
     }
 
 
@@ -96,22 +89,18 @@ class OWPReciever_v2Service implements WeatherDataReciever
 
     private function getRequest($city)
     {
-        try {
-            $lat = $city->latitude;
-            $lon = $city->longitude;
+        $lat = $city->latitude;
+        $lon = $city->longitude;
 
-            $query = "https://api.openweathermap.org/data/2.5/weather";
+        $query = "https://api.openweathermap.org/data/2.5/weather";
 
-            $info = Http::get($query, [
-                'lat' => $lat,
-                'lon' => $lon,
-                'appid' => $this->api_key,
-                'units' => $this->units
-            ])->throw()->json();
+        $info = Http::get($query, [
+            'lat' => $lat,
+            'lon' => $lon,
+            'appid' => $this->api_key,
+            'units' => $this->units
+        ])->throw()->json();
 
-            return $info;
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
+        return $info;
     }
 }

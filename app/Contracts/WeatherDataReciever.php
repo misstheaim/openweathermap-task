@@ -4,5 +4,5 @@ namespace App\Contracts;
 
 interface WeatherDataReciever 
 {
-    public function recieveData();
+    public function recieveData($city);
 }

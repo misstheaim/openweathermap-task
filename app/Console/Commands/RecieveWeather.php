@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Contracts\WeatherDataReciever;
+use App\Models\City;
 use Illuminate\Console\Command;
 
 class RecieveWeather extends Command
@@ -24,8 +25,15 @@ class RecieveWeather extends Command
     /**
      * Execute the console command.
      */
+
+    protected $f;
     public function handle(WeatherDataReciever $dataReciever)
     {
-        $dataReciever->recieveData();
+        $this->f = $dataReciever;
+        $this->info("Started----");
+        $this->withProgressBar(City::all(), function(City $city){
+            $this->f->recieveData($city);
+        });
+        $this->info("Finished!");
     }
 }

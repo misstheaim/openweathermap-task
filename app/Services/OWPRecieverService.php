@@ -25,22 +25,22 @@ class OWPRecieverService implements WeatherDataReciever
     }
 
 
-    public function recieveData() : bool
+    public function recieveData($city) : bool
     {
 
-        $cities = $this->getCities();
+        //$cities = $this->getCities();
         
 
-        foreach ($cities as $city) {
+        //foreach ($cities as $city) {
             $city_name = $city->name;
             $info = $this->getRequest($city);
 
             $this->createData($city_name, $info);
             
             //dd($info);
-        }
+        //}
 
-        dump('Data succefully recieved!');
+        //dump('Data succefully recieved!');
         return true;
     }
 
