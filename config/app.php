@@ -123,4 +123,14 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |----------------------------------------------------------------------------
+    | CUSTOM CONFIGURATIONS
+    |----------------------------------------------------------------------------
+    */
+    'host_name' => env('SWAGGER_HOST'),
+    'api_key' => env('OWP_API_KEY'),
+    'units' => env('OWP_UNITS')
+
+
 ];

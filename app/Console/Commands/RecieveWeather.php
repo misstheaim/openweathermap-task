@@ -26,13 +26,11 @@ class RecieveWeather extends Command
      * Execute the console command.
      */
 
-    protected $f;
     public function handle(WeatherDataReciever $dataReciever)
     {
-        $this->f = $dataReciever;
         $this->info("Started----");
-        $this->withProgressBar(City::all(), function(City $city){
-            $this->f->recieveData($city);
+        $this->withProgressBar(City::all(), function(City $city) use ($dataReciever){
+            $dataReciever->recieveData($city);
         });
         $this->info("Finished!");
     }

@@ -2,7 +2,9 @@
 
 namespace App\Contracts;
 
+use App\Models\City;
+
 interface WeatherDataReciever 
 {
-    public function recieveData($city);
+    public function recieveData(City $city);
 }

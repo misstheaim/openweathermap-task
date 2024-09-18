@@ -9,7 +9,6 @@ use DateTimeZone;
 use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class OWPRecieverService implements WeatherDataReciever 
@@ -27,20 +26,10 @@ class OWPRecieverService implements WeatherDataReciever
 
     public function recieveData($city) : bool
     {
+        $city_name = $city->name;
+        $info = $this->getRequest($city);
 
-        //$cities = $this->getCities();
-        
-
-        //foreach ($cities as $city) {
-            $city_name = $city->name;
-            $info = $this->getRequest($city);
-
-            $this->createData($city_name, $info);
-            
-            //dd($info);
-        //}
-
-        //dump('Data succefully recieved!');
+        $this->createData($city_name, $info);
         return true;
     }
 
@@ -72,17 +61,6 @@ class OWPRecieverService implements WeatherDataReciever
         }
     }
     
-
-
-    private function getCities() 
-    {
-        try {
-            return DB::table('cities')->get();
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
-    }
-
 
     private function getTime($info)
     {

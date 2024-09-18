@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use OpenApi\Annotations as OA;
 
+define('API_HOST', config('app.host_name'));
+
 /**
  * @OA\Info(
  *   title="API for getting weather data about cities around the world",
@@ -14,7 +16,7 @@ use OpenApi\Annotations as OA;
  * )
  * 
  * @OA\Server(
- *    url="http://localhost/api",
+ *    url=API_HOST,
  *    description="Local server for developing uses test data"
  * )
  * 

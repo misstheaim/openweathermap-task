@@ -3,12 +3,12 @@
 namespace App\Services;
 
 use App\Contracts\WeatherDataReciever;
+use App\Models\City;
 use App\Models\Weather;
 use DateTime;
 use DateTimeZone;
 use Exception;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class OWPReciever_v2Service implements WeatherDataReciever 
@@ -19,28 +19,18 @@ class OWPReciever_v2Service implements WeatherDataReciever
 
     public function __construct()
     {
-        //::add('key', env('OWP_API_KEY') , now()->addMinutes(10));
-        //Cache::add('units', env('OWP_UNITS') , now()->addMinutes(10));
-        //$this->api_key = Cache::get('key');
-        //$this->units = Cache::get('units');
-        $this->api_key = env('OWP_API_KEY');
-        $this->units = env('OWP_UNITS');
+        $this->api_key = config('app.api_key');
+        $this->units = config('app.units');
     }
 
 
-    public function recieveData($city) : bool
+    public function recieveData(City $city) : bool
     {
-        //$cities = $this->getCities();
-        
+        $city_name = $city->name;
+        $info = $this->getRequest($city);
 
-        //foreach ($cities as $city) {
-            $city_name = $city->name;
-            $info = $this->getRequest($city);
+        $this->createData($city_name, $info);
 
-            $this->createData($city_name, $info);
-
-        //}
-        //dump('Data succefully recieved! version:2');
         return true;
     }
 
@@ -65,13 +55,6 @@ class OWPReciever_v2Service implements WeatherDataReciever
             'humidity' => $info['main']['humidity']
         ]);
 
-    }
-    
-
-
-    private function getCities() 
-    {
-        return DB::table('cities')->get();
     }
 
 
