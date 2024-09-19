@@ -83,9 +83,12 @@ class ApiEndpointsTest extends TestCase
             );
         });
 
-        // $response->assertJsonPath('data.0.date_time', fn (DateTimeZone $date) =>
-        //     $date == Weather::select('date_time')->latest()
-        // );
+        $response->assertJsonPath('data.date_time', function (string $date) {
+            $date_time = Weather::latest('date_time')->first()->toArray();
+            return $date == $date_time['date_time'];
+        });
+
+        
     }
 
     // public function test_recieve_city_latest_weather_bad_request_test()

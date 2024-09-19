@@ -18,15 +18,15 @@ class WeatherFactory extends Factory
     public function definition(): array
     {
         return [
-            'date_time' => now(),
+            'date_time' => date('Y-m-d H:i:s', rand(1205467224, 1255467224)),
             'weather_name' => Str::random(10),
-            'latitude' => rand(),
-            'longitude' =>rand(),
-            'temperature' =>rand(),
-            'min_temperature' =>rand(),
-            'max_temperature' =>rand(),
-            'pressure' =>rand(),
-            'humidity' =>rand(),
+            'latitude' => rand()/100000000,
+            'longitude' =>rand()/100000000,
+            'temperature' =>rand()/100000000,
+            'min_temperature' =>rand()/100000000,
+            'max_temperature' =>rand()/100000000,
+            'pressure' =>rand()/100000000,
+            'humidity' =>rand()/100000000,
         ];
     }
 }

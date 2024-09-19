@@ -58,7 +58,7 @@ class OWPReciever_v2Service implements WeatherDataReciever
     }
 
 
-    private function getTime($info)
+    private function getTime($info) : DateTime
     {
         $date_time = new DateTime();
         $date_time = $date_time->setTimestamp($info['dt']);
