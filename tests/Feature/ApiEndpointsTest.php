@@ -14,13 +14,16 @@ class ApiEndpointsTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $seeder = WeatherSeeder::class;
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed( CitySeeder::class );
+        $this->seed( WeatherSeeder::class );
+    }
 
     public function test_recieve_cities_test() 
     {
-        $this->seed(CitySeeder::class);
-
-        $response = $this->get('/api/cities');
+        $response = $this->getJson('/api/cities');
 
         $response->assertStatus(200);
         $response->assertJson(function (AssertableJson $json) {
@@ -34,10 +37,9 @@ class ApiEndpointsTest extends TestCase
 
     public function test_recieve_city_weather_test()
     {
-        $this->seed(CitySeeder::class);
         $city = City::first()->toArray()['name'];
         $url = '/api/weather/' . $city;
-        $response = $this->get($url);
+        $response = $this->getJson($url);
 
         $response->assertStatus(200);
         $response->assertJson(function (AssertableJson $json) {
@@ -51,26 +53,17 @@ class ApiEndpointsTest extends TestCase
         });
     }
 
-    // public function test_recieve_city_weather_bad_request_test()
-    // {
-    //     Exceptions::fake();
-    //     $this->seed(CitySeeder::class);
-
-    //     $response = $this->get('/api/weather/NotExistingCity');
-    //     Exceptions::assertReported(ValidationException::class);
-
-    //     $response->assertStatus(302);
-    //     $response->assertJson(function (AssertableJson $json) {
-    //         $json->has('message');
-    //     });
-    // }
+    public function test_recieve_city_weather_bad_request_test()
+    {
+        $response = $this->getJson('/api/weather/NotExistingCity');
+        $response->assertStatus(422);
+    }
 
     public function test_recieve_city_latest_weather_test()
     {
-        $this->seed(CitySeeder::class);
         $city = City::first()->toArray()['name'];
         $url = '/api/weather/' . $city . '/latest';
-        $response = $this->get($url);
+        $response = $this->getJson($url);
 
         $response->assertStatus(200);
         $response->assertJson(function (AssertableJson $json) {
@@ -83,28 +76,23 @@ class ApiEndpointsTest extends TestCase
             );
         });
 
-        $response->assertJsonPath('data.date_time', function (string $date) {
-            $date_time = Weather::latest('date_time')->first()->toArray();
+        $response->assertJsonPath('data.date_time', function (string $date) use ($city) {
+            $date_time = Weather::where('city', $city)->latest('date_time')->first()->toArray();
             return $date == $date_time['date_time'];
         });
 
         
     }
 
-    // public function test_recieve_city_latest_weather_bad_request_test()
-    // {
-    //     $this->seed(CitySeeder::class);
-    //     $response = $this->withoutExceptionHandling()->get('/api/weather/NotExistingCity/latest');
-    //     $response->assertStatus(302);
-    //     $response->assertJson(function (AssertableJson $json) {
-    //         dump($json);
-    //         $json->has('message');
-    //     });
-    // }
+    public function test_recieve_city_latest_weather_bad_request_test()
+    {
+        $response = $this->getJson('/api/weather/NotExistingCity/latest');
+        $response->assertStatus(422);
+    }
 
     public function test_recieve_all_weather_data_test()
     {
-        $response = $this->get('/api/weather/');
+        $response = $this->getJson('/api/weather/');
 
         $response->assertStatus(200);
         $response->assertJson(function (AssertableJson $json) {

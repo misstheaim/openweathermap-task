@@ -28,8 +28,9 @@ class OWPRecieverService implements WeatherDataReciever
     {
         $city_name = $city->name;
         $info = $this->getRequest($city);
+        $date_time = $this->getTime($info);
 
-        $this->createData($city_name, $info);
+        $this->createData($city_name, $info, $date_time);
         return true;
     }
 
@@ -37,10 +38,8 @@ class OWPRecieverService implements WeatherDataReciever
 
     //=============Private functions=================
 
-    private function createData($city_name, $info) 
+    private function createData($city_name, $info, $date_time) 
     {
-        $date_time = $this->getTime($info);
-
         try {
 
             Weather::create([

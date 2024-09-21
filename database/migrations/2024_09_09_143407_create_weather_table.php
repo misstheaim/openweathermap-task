@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('weather', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('city');
+            $table->string('city')->nullable(false);
             $table->dateTimeTz('date_time');
             $table->string('weather_name');
             $table->float('latitude');

@@ -7,8 +7,6 @@ use App\Models\City;
 use App\Models\Weather;
 use DateTime;
 use DateTimeZone;
-use Exception;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class OWPReciever_v2Service implements WeatherDataReciever 
@@ -28,8 +26,9 @@ class OWPReciever_v2Service implements WeatherDataReciever
     {
         $city_name = $city->name;
         $info = $this->getRequest($city);
+        $date_time = $this->getTime($info);
 
-        $this->createData($city_name, $info);
+        $this->createData($city_name, $info, $date_time);
 
         return true;
     }
@@ -38,10 +37,8 @@ class OWPReciever_v2Service implements WeatherDataReciever
 
     //=============Private functions=================
 
-    private function createData($city_name, $info) 
+    private function createData($city_name, $info, $date_time) 
     {
-        $date_time = $this->getTime($info);
-
         Weather::create([
             'city' => $city_name,
             'date_time' => $date_time,
@@ -58,11 +55,11 @@ class OWPReciever_v2Service implements WeatherDataReciever
     }
 
 
-    private function getTime($info) : DateTime
+    private function getTime($info)
     {
         $date_time = new DateTime();
         $date_time = $date_time->setTimestamp($info['dt']);
-        $timezone = '+'.date('hi', mktime(0, 0, $info['timezone']));
+        $timezone = '+' . date('hi', mktime(0, 0, $info['timezone']));
         $date_timezone = new DateTimeZone($timezone);
         $date_time->setTimezone($date_timezone);
         return $date_time;
@@ -70,7 +67,7 @@ class OWPReciever_v2Service implements WeatherDataReciever
 
 
 
-    private function getRequest($city)
+    public function getRequest($city)
     {
         $lat = $city->latitude;
         $lon = $city->longitude;

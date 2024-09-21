@@ -20,13 +20,13 @@ class WeatherFactory extends Factory
         return [
             'date_time' => date('Y-m-d H:i:s', rand(1205467224, 1255467224)),
             'weather_name' => Str::random(10),
-            'latitude' => rand()/100000000,
-            'longitude' =>rand()/100000000,
-            'temperature' =>rand()/100000000,
-            'min_temperature' =>rand()/100000000,
-            'max_temperature' =>rand()/100000000,
-            'pressure' =>rand()/100000000,
-            'humidity' =>rand()/100000000,
+            'latitude' => rand(-4000, 4000)/100,
+            'longitude' =>rand(-4000, 4000)/100,
+            'temperature' =>rand(-4000, 4000)/100,
+            'min_temperature' =>rand(-4000, 4000)/100,
+            'max_temperature' =>rand(-4000, 4000)/100,
+            'pressure' =>rand(-4000, 4000)/100,
+            'humidity' =>rand(-4000, 4000)/100,
         ];
     }
 }
