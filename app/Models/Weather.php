@@ -12,7 +12,7 @@ class Weather extends Model
 
     protected $guarded = [];
 
-    public function city() : BelongsTo
+    public function cityParent() : BelongsTo
     {
         return $this->belongsTo(City::class, 'city', 'name');
     }

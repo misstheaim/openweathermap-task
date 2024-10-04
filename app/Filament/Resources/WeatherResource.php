@@ -9,6 +9,7 @@ use App\Models\Weather;
 use Filament\Forms;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Livewire;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -34,15 +35,17 @@ class WeatherResource extends Resource
         return $form
             ->schema([
                 Select::make('city')
-                    ->relationship('city', 'name')
+                    ->relationship('cityParent', 'name')
                     ->live()
                     ->afterStateUpdated(function( Set $set, Get $get, ?string $state) {
-                        $set('latitude', City::select('latitude')->where('name', $state)->get()->toArray()[0]['latitude']);
-                        $set('longitude', City::select('longitude')->where('name', $state)->get()->toArray()[0]['longitude']);
+                        $latitude = City::select('latitude')->where('name', $state)->get()->toArray();
+                        $set('latitude', $latitude ? $latitude[0]['latitude'] : 0);
+                        $longitude = City::select('longitude')->where('name', $state)->get()->toArray();
+                        $set('longitude', $longitude ? $longitude[0]['longitude'] : 0);
                     })
                     //->searchable()
                     ->required(),
-                DatePicker::make('date_time')
+                DateTimePicker::make('date_time')
                     ->required()
                     ->maxDate(now()),
                 TextInput::make('weather_name')
